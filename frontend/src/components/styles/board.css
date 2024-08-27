@@ -1,0 +1,57 @@
+.boardContainer{
+    margin: 0px;
+    padding: 0px;
+
+    height: 100vh;
+    width: 100vw;
+}
+.boardBody{
+    border: 1px solid white;
+    border-collapse: collapse;
+
+    margin: auto auto;
+
+    tr,td{
+        border: 1px solid white;
+        width: 80px;
+        height: 80px;
+    }
+
+    .boardTile{
+        cursor: pointer;
+    }
+
+
+}
+
+
+
+.pieceSelect{
+    text-align: center;
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+    
+    tr,td{
+        border: 1px solid white;
+        padding: 20px;
+    }
+    td{
+        cursor: pointer;
+    }
+}
+
+
+.pieceSelectDanger{
+    text-align: center;
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    tr,td{
+        border: 1px solid red;
+        padding: 20px;
+    }
+}

@@ -1,0 +1,65 @@
+.roomContainer{
+    margin: 0px;
+    padding: 0px;
+
+    display: flex;
+
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items:first baseline;
+
+    width: 100vw;
+    height: 100vh;
+
+    input{
+        flex:1;
+        width: 200px;
+        border: 15 px solid green;
+    }
+
+
+    button
+    {
+        padding: 5px 15px 5px 15px;
+        margin-top: 50px;
+       
+
+    }
+}
+
+.roomLeft{
+    width: 40%;
+    margin:auto auto;
+}
+
+.roomRight{
+    width: 40%;
+    margin:auto auto;
+
+    table,td,tr,th{
+        border: 1px solid white;
+        border-collapse: collapse;
+        text-align: center;
+        vertical-align: center;
+        
+    }
+
+    table{
+        max-height: 300px;
+        overflow-y: scroll;
+    }
+
+
+    td,tr,th{
+        padding: 10px;
+    }
+    button
+    {
+        margin: auto auto;
+        /* padding: 0px; */
+        /* padding: 5px 15px 5px 15px; */
+        /* margin-top: 50px; */
+       
+
+    }
+}
