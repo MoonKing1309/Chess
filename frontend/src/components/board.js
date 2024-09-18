@@ -28,7 +28,7 @@ function Board(props) {
     const setPTurn = props.pTurn[1];
     // console.log("settting stateeee")
     const [board, setBoard] = useState([[null, null, null, null, null], [null, null, null, null, null], [null, null, null, null, null], [null, null, null, null, null], [null, null, null, null, null]])
-    const [time, setTime] = useState(100000)
+    // const [time, setTime] = useState(100000)
 
     const [pawn, setPawn] = useState(0)
     const [hero1, setHero1] = useState(0)
@@ -55,12 +55,12 @@ function Board(props) {
         // console.log("board here socket is " , socket)
         if (socket) {
             socket.on("getFirstBoard", (data) => {
-                console.log("side is " , data)
+                // console.log("side is " , data)
                 if (side == "Blue") {
                     setBoard(data.newBoard)
                 }
                 else {
-                    console.log("First Board Reversinggg")
+                    // console.log("First Board Reversinggg")
                     data.newBoard.forEach((value, index) => {
                         value.reverse()
                     })
@@ -74,30 +74,29 @@ function Board(props) {
             })
 
             socket.on("setBoard", (data) => {
-                console.log("recd",data.newBoard)
+                
+                // console.log("<---------------------",pTurn,newPTurn,"--------------------->")
                 if (side == "Blue") {
+                    
                     setBoard(data.newBoard)
                 }
                 else {
-                    console.log("----------------------------------------The player that moved wat " , pTurn, " so what do we do!!!!!!--------------------------------------------  ")
+                    
+                    // data.newBoard.forEach((row, rowIndex) => {
+                    //     const rowString = row.map((item, colIndex) => `${item}`).join(' | ');
+                    //     console.log(`Row ${rowIndex}: ${rowString}`);
+                    // });
                     if (pTurn=='R'){
-                        console.log("NOT Reversinggg")
+                        // console.log("NOT Reversinggg")
                         setBoard(data.newBoard)
                     }
                     else{
-                        console.log("Reversinggg")
+                        // console.log("Reversinggg")
                         data.newBoard.forEach((value, index) => {
                             value.reverse()
                         })
                         setBoard(data.newBoard.reverse())
                     }
-                }
-                console.log("returned from setBoard", pTurn)
-                if (pTurn == "B") {
-                    setPTurn("R")
-                }
-                else if (pTurn == "R") {
-                    setPTurn("B")
                 }
             })
 
@@ -116,19 +115,25 @@ function Board(props) {
 
         }
 
-    }, [socket,pTurn])
-    useEffect(() => {
-        if (time > 0)
-            setTimeout(() => {
-                if (time > 0) {
-                    setTime(time - 1)
-                }
-            }, 1000)
-        else {
-            handleStartGame()
-            setStarted(true)
-        }
-    }, [time])
+    }, [socket])
+
+    useEffect(()=>{
+        let newPTurn = (pTurn == "R" ? "B" : "R");
+        setPTurn(newPTurn)
+    },[board])
+
+    // useEffect(() => {
+    //     if (time > 0)
+    //         setTimeout(() => {
+    //             if (time > 0) {
+    //                 setTime(time - 1)
+    //             }
+    //         }, 1000)
+    //     else {
+    //         handleStartGame()
+    //         setStarted(true)
+    //     }
+    // }, [time])
 
     async function handleStartGame(event) {
         event.preventDefault()
@@ -158,6 +163,9 @@ function Board(props) {
             }
             start.current = [position[0], position[1]]
             pieces.current = board[position[0]][position[1]]
+            if (pieces.current == null){
+                return
+            }
 
             // console.log("selected a piece at ",start)
 
@@ -171,6 +179,10 @@ function Board(props) {
             }
             console.log(start.current)
             let x = [4-parseInt(start.current[0]), parseInt(start.current[1])]
+
+            if (x ==null){
+                return
+            }
             let char = pieces.current.substring(pieces.current.indexOf('-') + 1);
             let limit = 0
             let sol = []
@@ -255,6 +267,9 @@ function Board(props) {
             }
             console.log("moving selected piece to  ",start)
             let x = pieces.current;
+            if (x ==null){
+                return
+            }
             if (x[0] == "B") {
                 if (x[x.length - 1] == "P") {
                     if (position[1] == start.current[1]) {
@@ -702,7 +717,7 @@ function Board(props) {
                     setHero1(hero1-1)
                 }
                 else if (currPiece.at(-1)=="2"){
-                    setHero1(hero2-1)
+                    setHero2(hero2-1)
                 }
             }
             event.target.innerHTML = `${piece.side}-${piece.kind}`
@@ -761,7 +776,7 @@ function Board(props) {
             <h1 style={{ textAlign: 'center' }}> Currently Playing : {side}</h1>
             <div className='playerTurn' style={(!started) ? { display: "none" } : {}}>
                 {console.log("pTurn and side is ", pTurn, side)}
-                {(pTurn[0] == side[0]) ? <h2 style={{ color: 'green', textAlign: 'center' }}>Our Turn</h2> : <h2 style={{ color: 'red', textAlign: 'center' }}>Opponent's Turn</h2>}
+                {(pTurn[0] == side[0]) ? <h2 style={{ color: 'green', textAlign: 'center' }}>Your Turn</h2> : <h2 style={{ color: 'red', textAlign: 'center' }}>Opponent's Turn</h2>}
             </div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: "500px" }}>
                 <table className='boardBody'>
@@ -869,8 +884,6 @@ function Board(props) {
                         </td>
                     </tr>
                 </table>
-                <br></br>
-                <h3>You have {time} seconds to choose positions!!!</h3>
                 <br></br>
                 <button onClick={handleStartGame} disabled={pCount >= 2 ? true : false}>
                     Start Game

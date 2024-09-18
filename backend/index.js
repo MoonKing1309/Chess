@@ -130,8 +130,8 @@ io.on('connection', socket => {
     socket.on("makeMove", async (data) => {
         let { start, end, side, roomID, piece } = data
         console.log("index.js line 134 data ->" , start,end,side,piece)
-        let curBoard = await boardCollection.findOne({ roomID: roomID });
-        curBoard = curBoard.board;
+        let lastBoard = (await boardCollection.find({ roomID: roomID }));
+        let curBoard = lastBoard[lastBoard.length-1].board;
         if (side == "R") {
             start[0] = 4-start[0] 
             end[0] = 4-end[0]
@@ -247,7 +247,8 @@ io.on('connection', socket => {
         console.log('line 247' , start, end, side, piece, roomID, curBoard)
         let winner = await charCount(curBoard)
         if (winner==0){
-            await boardCollection.findOneAndUpdate({roomID:roomID},{board:curBoard} , {$inc:{sNO:1}})
+            await boardCollection.create({roomID:roomID,board:curBoard,sNO:lastBoard[0].sNO+1})
+            console.log("----------------------------------------------------------------------")
             io.to(roomID).emit("setBoard",{ roomID: roomID, newBoard: curBoard}) 
         }
         else if (winner==1){
