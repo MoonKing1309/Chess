@@ -55,18 +55,14 @@ function Board(props) {
         // console.log("board here socket is " , socket)
         if (socket) {
             socket.on("getFirstBoard", (data) => {
+                console.log("side is " , data)
                 if (side == "Blue") {
-                    data.newBoard.forEach((value, index) => {
-                        value.reverse()
-                    })
-
                     setBoard(data.newBoard)
                 }
                 else {
+                    console.log("First Board Reversinggg")
                     data.newBoard.forEach((value, index) => {
-                        // if(index==4){
-                        //     value.reverse()
-                        // }
+                        value.reverse()
                     })
                     setBoard(data.newBoard.reverse())
                 }
@@ -80,26 +76,21 @@ function Board(props) {
             socket.on("setBoard", (data) => {
                 console.log("recd",data.newBoard)
                 if (side == "Blue") {
-                    console.log("here to check to reverser")
-                    if(pTurn=="R"){
-                        data.newBoard.forEach((value, index) => {
-                            value.reverse()
-                        })
-                    }
                     setBoard(data.newBoard)
                 }
                 else {
-                    if(pTurn=="R"){
+                    console.log("----------------------------------------The player that moved wat " , pTurn, " so what do we do!!!!!!--------------------------------------------  ")
+                    if (pTurn=='R'){
+                        console.log("NOT Reversinggg")
                         setBoard(data.newBoard)
                     }
                     else{
+                        console.log("Reversinggg")
                         data.newBoard.forEach((value, index) => {
                             value.reverse()
                         })
                         setBoard(data.newBoard.reverse())
                     }
-                    // setBoard(data.newBoard.reverse())
-                    // setBoard(data.newBoard)
                 }
                 console.log("returned from setBoard", pTurn)
                 if (pTurn == "B") {
@@ -144,6 +135,9 @@ function Board(props) {
         let firstRow = board[0];
         // console.log("The first row being sent is " + firstRow)
         if (socket) {
+            // if(side=="R"){
+            //     firstRow = firstRow.reverse()
+            // }
             socket.emit("setFirstBoard", { roomID: roomID, side: side, firstRow: firstRow })
         }
 
@@ -160,10 +154,12 @@ function Board(props) {
                 position = String(4 - parseInt(position[0])) + String(parseInt(position[1]))
             }
             if (side == "Red") {
-                position = String(4 - parseInt(position[0])) + String(parseInt(position[1]))
+                position = String(4-parseInt(position[0])) + String(parseInt(position[1]))
             }
             start.current = [position[0], position[1]]
             pieces.current = board[position[0]][position[1]]
+
+            // console.log("selected a piece at ",start)
 
             if (pieces.current[0] != side[0]) {
                 alert("Cannot move other player's pieces!")
@@ -174,7 +170,7 @@ function Board(props) {
 
             }
             console.log(start.current)
-            let x = [4 - parseInt(start.current[0]), parseInt(start.current[1])]
+            let x = [4-parseInt(start.current[0]), parseInt(start.current[1])]
             let char = pieces.current.substring(pieces.current.indexOf('-') + 1);
             let limit = 0
             let sol = []
@@ -252,11 +248,12 @@ function Board(props) {
         else {
             let position = String(event.target.id);
             if (side == "Blue") {
-                position = String(4 - parseInt(position[0])) + String(parseInt(position[1]))
+                position = String(4-parseInt(position[0])) + String(parseInt(position[1]))
             }
             if (side == "Red") {
-                position = String(4 - parseInt(position[0])) + String(parseInt(position[1]))
+                position = String(4-parseInt(position[0])) + String(parseInt(position[1]))
             }
+            console.log("moving selected piece to  ",start)
             let x = pieces.current;
             if (x[0] == "B") {
                 if (x[x.length - 1] == "P") {
@@ -677,7 +674,7 @@ function Board(props) {
                     }
                 }
             }
-            console.log('Trying to move from      ', start.current, end.current, pieces.current, roomID)
+            // console.log('Trying to move from      ', start.current, end.current, pieces.current, roomID)
             socket.emit('makeMove', { start: start.current, end: end.current, side: pieces.current[0], roomID: roomID, piece: pieces.current[pieces.current.length - 1] })
             end.current = null
             start.current = null
@@ -696,6 +693,18 @@ function Board(props) {
 
     function handleStartClick(event) {
         if (piece !== null) {
+            let currPiece = event.target.innerHTML
+            if (currPiece !=null){
+                if (currPiece.at(-1)=="P"){
+                    setPawn(pawn-1)
+                }
+                else if (currPiece.at(-1)=="1"){
+                    setHero1(hero1-1)
+                }
+                else if (currPiece.at(-1)=="2"){
+                    setHero1(hero2-1)
+                }
+            }
             event.target.innerHTML = `${piece.side}-${piece.kind}`
             let position = event.target.id;
             piece.position = [position[0], position[1]];
@@ -740,6 +749,11 @@ function Board(props) {
             setPiece(new Hero2([0, 0], side))
             setHero2(hero2 + 1)
         }
+    }
+
+    function handleLeaveGame(event){
+        socket.emit('leavegame',{roomID:roomID})
+        navigate('/')
     }
 
     return (
@@ -862,6 +876,9 @@ function Board(props) {
                     Start Game
                 </button>
             </div>
+                <button onClick={handleLeaveGame}>
+                    Leave
+                </button>
 
         </div>
     )

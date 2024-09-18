@@ -87,7 +87,7 @@ io.on('connection', socket => {
     socket.on('leaveRoom', async (data) => {
         console.log(`User ${socket.id} left!!!`)
         let { roomId } = data
-        await roomCollection.findAndUpdate({ roomID: roomId }, { playerCount: playerCount - 1 })
+        await roomCollection.findAndUpdate({ roomID: roomId }, { $inc : {playerCount: - 1 }})
         socket.leave(roomId)
     })
 
@@ -104,10 +104,11 @@ io.on('connection', socket => {
         let index = 0;
         if (side == "Red") {
             index = 4;
-        }
-        else {
             firstRow.reverse()
         }
+        // else {
+        //     firstRow.reverse()
+        // }
         let newBoard = await boardCollection.findOneAndUpdate({ roomID: roomID }, { $set: { [`board.${index}`]: firstRow }, $inc: { sNO: 1 } }, { new: true })
         // console.log(io.sockets.adapter.rooms.get(roomID))
         // console.log(newBoard)
@@ -128,15 +129,19 @@ io.on('connection', socket => {
 
     socket.on("makeMove", async (data) => {
         let { start, end, side, roomID, piece } = data
+        console.log("index.js line 134 data ->" , start,end,side,piece)
         let curBoard = await boardCollection.findOne({ roomID: roomID });
         curBoard = curBoard.board;
         if (side == "R") {
-            start[0] = 4 - start[0]
-            end[0] = 4 - end[0]
+            start[0] = 4-start[0] 
+            end[0] = 4-end[0]
+
+            start[1] = 4-start[1]
+            end[1] = 4- end[1]
         }
         else{
-            start[1] = 4- start[1]
-            end[1] = 4 - end[1]
+            start[1] = start[1]
+            end[1] = end[1]
         }
         start[0] = parseInt(start[0])
         end[0] = parseInt(end[0])
@@ -239,7 +244,7 @@ io.on('connection', socket => {
         curBoard[end[0]][end[1]]=curBoard[start[0]][start[1]]
         curBoard[start[0]][start[1]] = null
         
-        console.log(start, end, side, piece, roomID, curBoard)
+        console.log('line 247' , start, end, side, piece, roomID, curBoard)
         let winner = await charCount(curBoard)
         if (winner==0){
             await boardCollection.findOneAndUpdate({roomID:roomID},{board:curBoard} , {$inc:{sNO:1}})
@@ -256,8 +261,6 @@ io.on('connection', socket => {
 
 
 
-
-        //All the game logic goes here from the gameLogic.js
     })
 
     // socket.on("getAllRoooms",(data)=>{

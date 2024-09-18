@@ -37,6 +37,7 @@ function Room(props) {
         if (socket){
             let stateVariable = {socket:socket,roomID:roomID,side:side}
             socket.on('waitingForOtherPlayer',(data)=>{
+                //todo - use localstorage to store tehse
                 setRoomID(data.roomId)
                 setSide(data.side)
                 setPCount(data.pCount)
@@ -141,7 +142,7 @@ function Room(props) {
                             //        No Tables
                             //    </tr>
 
-
+ 
 
                            )
                     }
