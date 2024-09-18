@@ -37,19 +37,19 @@ const dbConnect = async () => {
 }
 dbConnect()
 
-let allRooms = []
+let allRooms = new Set()
 io.on('connection', socket => {
     console.log(`User ${socket.id} connected`)
     // for (room of io.sockets.adapter.rooms){
     //     allRooms.push(room)
     // }
     // console.log("Sending io.stream ",io.sockets.adapter.rooms)
-    socket.emit("getAllRooms",{data:allRooms})
+    socket.emit("getAllRooms",{data:Array.from(allRooms)})
 
     socket.on('joinRoom', async (data) => {
         try {
             let roomId = data.roomID
-            allRooms.push(roomId)
+            allRooms.add(roomId)
             // console.log(roomId)
             let tempRoom = await roomCollection.findOne({ roomID: roomId, onGoing: true })
             // console.log(tempRoom)

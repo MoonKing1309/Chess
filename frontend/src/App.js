@@ -22,8 +22,8 @@ function App() {
   async function connect(){
     const tempSocket = await io.connect("http://localhost:5001")
     tempSocket.on('getAllRooms',(data)=>{
-      // console.log('allrooms is ',data)
-      setAllRooms(data.data)
+      console.log('allrooms is ',data)
+      setAllRooms(Array.from(data.data))
     })
     setSocket(tempSocket)
   }

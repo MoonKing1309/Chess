@@ -1,7 +1,7 @@
 import './styles/room.css'
 // import io from 'socket.io-client'
 import { useEffect, useState } from 'react'
-import { useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 // const socket = io.connect("http://localhost:5001");
 
 // import { socketID, socket } from '../socket';
@@ -11,7 +11,7 @@ function Room(props) {
     const roomID = props.roomID[0]
     const setRoomID = props.roomID[1]
     const side = props.side[0];
-    const setSide = props.side[1];  
+    const setSide = props.side[1];
     const socket = props.socket;
     const pCount = props.pCount[0];
     const setPCount = props.pCount[1];
@@ -21,35 +21,35 @@ function Room(props) {
 
 
     const allRooms = props.allRooms;
-    
 
-    async function sendRoomId(event){
+
+    async function sendRoomId(event) {
         event.preventDefault()
         // console.log("jere")
         // var room = io.sockets.adapter.rooms['roomId'];
         // prompt(io)
-        
-        socket.emit("joinRoom",{roomID})
+
+        socket.emit("joinRoom", { roomID })
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         // console.log(socket)
-        if (socket){
-            let stateVariable = {socket:socket,roomID:roomID,side:side}
-            socket.on('waitingForOtherPlayer',(data)=>{
+        if (socket) {
+            let stateVariable = { socket: socket, roomID: roomID, side: side }
+            socket.on('waitingForOtherPlayer', (data) => {
                 //todo - use localstorage to store tehse
                 setRoomID(data.roomId)
                 setSide(data.side)
                 setPCount(data.pCount)
                 // console.log("data 1 is " + data.data)
                 navigate(`/game`);
-                
+
             })
-            socket.on('letsPlay',(data)=>{
+            socket.on('letsPlay', (data) => {
                 // console.log("data 2 is " + data)
                 navigate(`/game`);
             })
-            socket.on('roomFullError',(data)=>{
+            socket.on('roomFullError', (data) => {
                 console.log("roomFullError" + data.data)
                 alert(`${data.data}`)
             })
@@ -59,14 +59,14 @@ function Room(props) {
             // })
         }
 
-    },[socket])
+    }, [socket])
 
     // useEffect(()=>{
     //     if(!allRooms){
     //         console.log("sad")
     //     }
     // },[allRooms])
-    
+
     // function printAllRooms(){
     //     let sol = []
     //     allRooms.forEach((value,index) => {
@@ -78,7 +78,7 @@ function Room(props) {
     //                 <td>{index+1}</td>
     //                 <td>{rName}</td>
     //                 <td><button onClick={()=>{
-                        
+
     //                 }}>Join</button></td>
     //             </tr>
     //             </>
@@ -86,12 +86,12 @@ function Room(props) {
     //        })
     //        return sol
     // }
-    function noTable(){
-        return(
+    function noTable() {
+        return (
             <>
-                <tr style={{textAlign:'center'}}>
+                <tr style={{ textAlign: 'center' }}>
                     <td colSpan={3}>
-                         No Rooms Available
+                        No Rooms Available
                     </td>
                 </tr>
             </>
@@ -105,7 +105,7 @@ function Room(props) {
                     <label>
                         <h1>Enter a Room ID</h1>
                     </label>
-                    <input type='text' name='roomId' onChange={(event)=>{
+                    <input type='text' name='roomId' onChange={(event) => {
                         setRoomID(event.target.value)
                     }}></input>
                 </form>
@@ -115,38 +115,36 @@ function Room(props) {
 
             </div>
 
-            <div className='roomRight' style={(allRooms==undefined)?{display:"none"}:{}}>
+            <div className='roomRight' style={(allRooms == undefined) ? { display: "none" } : {height:"100vh"}}>
                 <h2>Join Existing Rooms</h2>
-                    <table>
+                <table >
+                    <thead>
                         <tr>
                             <th>Index</th>
                             <th>RoomID</th>
                             <th>Action</th>
                         </tr>
-                    {(allRooms.length!=0)?(allRooms.map((value,index) => {
-                            // console.log(value,index)
-                            let rName= value
+                    </thead>
+                    <tbody style={{maxHeight:"200px",overflowY:'scroll'}}>
+                        {console.log(allRooms)}
+                        {(allRooms.length != 0) ? (Array(allRooms).map((value, index) => {
+                            let rName = value
                             return (<>
                                 <tr>
-                                    <td>{index+1}</td>
+                                    <td>{index + 1}</td>
                                     <td>{rName}</td>
-                                    <td><button onClick={()=>{
-                                        socket.emit('joinRoom',{rName})
+                                    <td><button onClick={() => {
+                                        socket.emit('joinRoom', { rName })
                                     }}>Join</button></td>
                                 </tr>
                             </>
-                                )
-                           })):(
-                               noTable()
-                            //    return <tr aria-colspan={3}>
-                            //        No Tables
-                            //    </tr>
-
- 
-
-                           )
-                    }
-                    </table>
+                            )
+                        })) : (
+                            noTable()
+                        )
+                        }
+                    </tbody>
+                </table>
             </div>
 
         </div>
