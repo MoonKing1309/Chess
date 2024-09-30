@@ -1,65 +1,131 @@
-.roomContainer{
-    margin: 0px;
-    padding: 10px;
-
+/* Main container for the room section */
+.roomContainer {
+    margin: 0;
+    padding: 20px;
     display: flex;
-
     flex-wrap: wrap;
-    justify-content: center;
-    align-items:first baseline;
-
+    justify-content: space-around;
+    align-items: center;
     width: 100vw;
-    height: auto;
-
-    input{
-        flex:1;
-        width: 200px;
-        border: 15 px solid green;
-    }
-
-
-    button
-    {
-        padding: 5px 15px 5px 15px;
-        margin-top: 50px;
-       
-
-    }
+    height: 100vh;
+    background-color: #f4f7f6; /* Light background for modern feel */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.roomLeft{
+/* Left panel for entering room ID */
+.roomLeft {
     width: 40%;
-    margin:auto auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: center;
+    margin: 10px;
 }
 
-.roomRight{
-    width: 40%;
-    height: 100%;
-    margin:auto auto;
-
-
-    table,td,tr,th{
-        border: 1px solid white;
-        border-collapse: collapse;
-        text-align: center;
-        vertical-align: center;
-        
-    }
-
-    
-
-
-    td,tr,th{
-        padding: 10px;
-    }
-    button
-    {
-        margin: auto auto;
-        /* padding: 0px; */
-        /* padding: 5px 15px 5px 15px; */
-        /* margin-top: 50px; */
-       
-
-    }
+/* Input styles for entering room ID */
+.roomLeft input[type='text'] {
+    width: 80%;
+    padding: 10px;
+    margin-top: 20px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s ease;
 }
 
+/* Focus state for input */
+.roomLeft input[type='text']:focus {
+    border-color: #0066cc; /* Highlight border on focus */
+}
+
+/* Button styles */
+.roomLeft button {
+    padding: 10px 20px;
+    margin-top: 20px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+}
+
+/* Hover effect for button */
+.roomLeft button:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+/* Right panel for listing available rooms */
+.roomRight {
+    width: 50%;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    margin: 10px;
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+/* Table styles for room listings */
+.roomRight table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.roomRight th, .roomRight td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+    font-size: 16px;
+}
+
+/* Table header styles */
+.roomRight th {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+}
+
+/* Alternate row background */
+.roomRight tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Join button inside the table */
+.roomRight button {
+    padding: 5px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.roomRight button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* No rooms available message */
+.roomRight .noRooms {
+    text-align: center;
+    font-size: 18px;
+    color: #333;
+}
+
+/* Break for spacing */
+.break {
+    height: 30px;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .roomLeft, .roomRight {
+        width: 90%;
+    }
+}

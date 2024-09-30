@@ -1,10 +1,9 @@
-const { boolean } = require('mathjs')
 const mongoose = require('mongoose')
 
 const roomSchema = new mongoose.Schema({
     roomID:String,
     playerCount:Number,
-    onGoing:boolean
+    onGoing:Boolean
 },{
     collection:'roomCollection'
 })

@@ -1,57 +1,122 @@
-.boardContainer{
-    margin: 0px;
-    padding: 0px;
-
+/* Main container for the board */
+.boardContainer {
+    margin: 0;
+    padding: 0;
     height: 100vh;
     width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f4f4f9; /* Soft background color */
 }
-.boardBody{
-    border: 1px solid white;
+
+/* Chessboard styling */
+.boardBody {
+    border: 2px solid #333; /* Darker border for contrast */
     border-collapse: collapse;
-
-    margin: auto auto;
-
-    tr,td{
-        border: 1px solid white;
-        width: 80px;
-        height: 80px;
-    }
-
-    .boardTile{
-        cursor: pointer;
-    }
-
-
+    margin: auto;
+    display: table;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
 }
 
+/* Each cell in the chessboard */
+.boardBody tr, .boardBody td {
+    border: none; /* Remove the white borders */
+    width: 80px;
+    height: 80px;
+}
 
+/* Board tile hover effect */
+.boardBody .boardTile {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
 
-.pieceSelect{
-    text-align: center;
+/* Alternate colors for chessboard tiles */
+.boardBody td:nth-child(even) {
+    background-color: #eee; /* Light color for even tiles */
+}
+
+.boardBody td:nth-child(odd) {
+    background-color: #444; /* Dark color for odd tiles */
+}
+
+.boardBody td:hover {
+    background-color: #ffeb3b; /* Highlight tile on hover */
+}
+
+/* Piece selection modal */
+.pieceSelect {
     display: flex;
-
     align-items: center;
     justify-content: center;
-    
-    tr,td{
-        border: 1px solid white;
-        padding: 20px;
-    }
-    td{
-        cursor: pointer;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Shadow for modal */
+}
+
+/* Table inside the piece selection modal */
+.pieceSelect tr, .pieceSelect td {
+    border: 1px solid #ddd;
+    padding: 20px;
+    transition: transform 0.2s ease;
+}
+
+.pieceSelect td {
+    cursor: pointer;
+}
+
+/* Hover effect for piece selection */
+.pieceSelect td:hover {
+    background-color: #0066cc;
+    color: #fff;
+    transform: scale(1.1); /* Slight zoom on hover */
+}
+
+/* Piece selection with danger (e.g., for warnings) */
+.pieceSelectDanger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Shadow for modal */
+}
+
+.pieceSelectDanger tr, .pieceSelectDanger td {
+    border: 1px solid red;
+    padding: 20px;
+}
+
+.pieceSelectDanger td {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.pieceSelectDanger td:hover {
+    background-color: red;
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Responsive chessboard for smaller screens */
+@media (max-width: 768px) {
+    .boardBody tr, .boardBody td {
+        width: 60px;
+        height: 60px;
     }
 }
 
+/* Responsive modal for piece selection */
+@media (max-width: 768px) {
+    .pieceSelect, .pieceSelectDanger {
+        padding: 10px;
+    }
 
-.pieceSelectDanger{
-    text-align: center;
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    tr,td{
-        border: 1px solid red;
-        padding: 20px;
+    .pieceSelect tr, .pieceSelect td,
+    .pieceSelectDanger tr, .pieceSelectDanger td {
+        padding: 10px;
     }
 }
